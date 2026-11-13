@@ -156,14 +156,15 @@ td input.text{width:8.5rem}
 .group-head{display:flex;align-items:baseline;gap:12px;padding-bottom:4px;border-bottom:2px solid var(--ink-2)}
 .group-head h3{font-size:1.15rem}
 .group-head span{color:var(--muted)}
-.opp{display:grid;grid-template-columns:1fr 12.5rem 7rem 5.5rem;gap:4px 14px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);line-height:1.3}
+.opp{display:grid;grid-template-columns:1fr 11.5rem 8.5rem 5.5rem;gap:4px 14px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);line-height:1.3}
 .opp .nm b{font-size:1rem}
 .opp .nm .where{color:var(--muted);font-size:.92rem}
+.opp .nm .where .bldg{color:var(--action);font-weight:700}
 .opp .nm .rec{color:var(--muted);font-size:.88rem}
 .opp .price b{font-size:1rem}
 .opp .price span{color:var(--muted);font-size:.88rem;margin-left:6px}
 .opp .go .btn.small{padding:4px 12px;font-size:.92rem}
-.opp .avail{font-size:.9rem;color:var(--ink-2)}
+.opp .avail{font-size:.9rem;color:var(--ink-2);white-space:nowrap}
 .opp .avail.full{color:var(--muted);font-style:italic}
 .opp .go{text-align:right}
 .empty{color:var(--muted);padding:20px 0}
@@ -460,36 +461,36 @@ var DEFAULT_PLAN = {
     O("lodge-library","lodge","Library",25000,1,true,"Room name and plaque"),
     O("lodge-sunporch","lodge","Sun Porch",25000,1,true,"Name and plaque on the porch"),
     O("lodge-hearth","lodge","Hearth",25000,1,true,"Plaque at the hearth","",false),
-    O("lodge-entry","lodge","Accessible entry",25000,1,true,"Plaque at the entry","",false),
-    O("lodge-rooms","lodge","Guest room",10000,33,true,"Door plaque"),
-    O("lodge-baths","lodge","Renovated bathroom",10000,7,true,"Discreet plaque"),
+    O("lodge-entry","lodge","Accessible Entry",25000,1,true,"Plaque at the entry","",false),
+    O("lodge-rooms","lodge","Guest Room",10000,33,true,"Door plaque"),
+    O("lodge-baths","lodge","Renovated Bathroom",10000,7,true,"Discreet plaque"),
     O("lodge-stairs","lodge","Stairway",10000,1,true,"Plaque at the landing"),
     O("lodge-store","lodge","Camp Store",10000,1,true,"Store signage"),
     O("brooks","brooks","Brooks Cabin",75000,1,true,"Building name and exterior signage","Naming of the Brooks renewal"),
     O("brooks-meeting","brooks","Meeting Room",25000,1,true,"Room name and plaque"),
     O("brooks-porch","brooks","Covered Porch",25000,1,true,"Name and plaque on the porch"),
     O("brooks-deck","brooks","Deck",25000,1,true,"Plaque on the deck"),
-    O("brooks-entry","brooks","Accessible entry",25000,1,true,"Plaque at the entry","",false),
-    O("brooks-rooms","brooks","Guest room",10000,14,true,"Door plaque"),
-    O("brooks-baths","brooks","Renovated bathroom",10000,3,true,"Discreet plaque"),
+    O("brooks-entry","brooks","Accessible Entry",25000,1,true,"Plaque at the entry","",false),
+    O("brooks-rooms","brooks","Guest Room",10000,14,true,"Door plaque"),
+    O("brooks-baths","brooks","Renovated Bathroom",10000,3,true,"Discreet plaque"),
     O("brooks-stairs","brooks","Stairway",10000,1,true,"Plaque at the landing"),
     O("bell","bell","Bell Cabin",75000,1,true,"Building name and exterior signage","Naming of the Bell renewal"),
     O("bell-meeting","bell","Meeting Room",25000,1,true,"Room name and plaque"),
     O("bell-deck","bell","Deck",25000,1,true,"Plaque on the deck"),
-    O("bell-entry","bell","Accessible entry",25000,1,true,"Plaque at the entry","",false),
-    O("bell-rooms","bell","Guest room",10000,17,true,"Door plaque"),
-    O("bell-baths","bell","Renovated bathroom",10000,4,true,"Discreet plaque"),
+    O("bell-entry","bell","Accessible Entry",25000,1,true,"Plaque at the entry","",false),
+    O("bell-rooms","bell","Guest Room",10000,17,true,"Door plaque"),
+    O("bell-baths","bell","Renovated Bathroom",10000,4,true,"Discreet plaque"),
     O("bell-stairs","bell","Stairway",10000,1,true,"Plaque at the landing"),
-    O("furnish","campus","Furnish a guest room",5000,64,false,"“Furnished by” line on the room’s plaque","Beds, seating and tables"),
-    O("meeting-furn","campus","Meeting room furnishings",5000,3,false,"Plaque in the room"),
+    O("furnish","campus","Furnish a Guest Room",5000,64,false,"“Furnished by” line on the room’s plaque","Beds, seating and tables"),
+    O("meeting-furn","campus","Meeting Room furnishings",5000,3,false,"Plaque in the room"),
     O("library-furn","campus","Library furnishings and shelving",5000,1,false,"Plaque in the room"),
     O("porch-furn","campus","Porch or deck furnishings",5000,5,false,"Plaque on site"),
     O("windows","campus","Windows and doors for one building",5000,3,false,"Donor wall"),
     O("outdoor","campus","Outdoor gathering spot",5000,null,false,"Marker on site","",false),
     O("bed","campus","New bed and mattress",2500,64,false,"Donor wall"),
     O("bench","campus","Bench, Adirondack chair or tree",2500,16,false,"Plaque or marker"),
-    O("lighting","campus","Guest room lighting and electrical",1000,64,false,"Donor wall"),
-    O("finishing","campus","Guest room finishing touches",500,64,false,"Campaign honor roll","Lighting and mirrors"),
+    O("lighting","campus","Guest Room lighting and electrical",1000,64,false,"Donor wall"),
+    O("finishing","campus","Guest Room finishing touches",500,64,false,"Campaign honor roll","Lighting and mirrors"),
     O("bedding","campus","Fresh bedding and guest comforts",250,null,false,"Campaign honor roll"),
     O("brick","campus","Engraved brick",250,null,false,"Engraved brick and the honor roll"),
     O("any","campus","A campaign gift of any amount",0,null,false,"Honor roll in print and online; donor wall at $1,000 and up")
@@ -538,8 +539,12 @@ function normalize(d){
   if (Array.isArray(d.opps) && d.opps.length) p.opps = clone(d.opps);
   return migrate(p);
 }
+var RENAMES = {"Accessible entry":"Accessible Entry", "Guest room":"Guest Room", "Renovated bathroom":"Renovated Bathroom",
+  "Furnish a guest room":"Furnish a Guest Room", "Meeting room furnishings":"Meeting Room furnishings",
+  "Guest room lighting and electrical":"Guest Room lighting and electrical", "Guest room finishing touches":"Guest Room finishing touches"};
 function migrate(p){
   p.opps.forEach(function(o){
+    if (RENAMES[o.name]) o.name = RENAMES[o.name];
     var l = null;
     if (o.level) l = p.levels.filter(function(x){ return x.id === o.level; })[0] || null;
     if (!l) l = levelFor(p, o.amount || 0);
@@ -593,7 +598,7 @@ function oppLeft(o){ return o.count == null ? null : Math.max(0, o.count - claim
 function oppTitle(o){
   if (o.bldg === "campus") return o.name;
   if (o.name.indexOf(BLDG[o.bldg].split(" ")[0]) === 0 || o.name.indexOf("The ") === 0) return o.name;
-  return BLDG[o.bldg] + " " + o.name.charAt(0).toLowerCase() + o.name.slice(1);
+  return BLDG[o.bldg] + " " + o.name;
 }
 
 function socName(l){
@@ -720,17 +725,16 @@ function renderChips(){
   });
 }
 function whereLine(o){
-  var parts = [];
-  if (o.bldg !== "campus" && o.name.indexOf("Cabin") < 0 && o.name.indexOf("The ") !== 0) parts.push(BLDG[o.bldg] + (o.count > 1 ? ", " + o.count + " in all" : ""));
-  if (o.desc) parts.push(o.desc);
-  return parts.join(". ");
+  var bldg = o.bldg !== "campus" && o.name.indexOf("Cabin") < 0 && o.name.indexOf("The ") !== 0 ? BLDG[o.bldg] : "";
+  if (!bldg && !o.desc) return null;
+  return h("span",{class:"where"}, " · ", bldg ? h("span",{class:"bldg", text: bldg}) : null, bldg && o.desc ? ". " : null, o.desc || null);
 }
 function availText(o){
   var left = oppLeft(o);
-  if (left === null) return {t:"Open", full:false};
+  if (left === null) return {t:"Available", full:false};
   if (left === 0) return {t: o.count === 1 ? "Named" : "All " + o.count + " named", full:true};
   if (o.count === 1) return {t:"Available", full:false};
-  return {t: left + " of " + o.count + " open", full:false};
+  return {t: left + " of " + o.count + " available", full:false};
 }
 function renderNaming(){
   var box = $("#namingList"); box.replaceChildren();
@@ -753,13 +757,14 @@ function renderNaming(){
     g.items.forEach(function(o){
       var av = availText(o);
       var pr = price(o);
-      var priceEl = pr > 0
+      var priceEl = pr >= 5000
         ? h("div",{class:"price", title: money(pr/months()) + " a month for " + months() + " months"}, h("b",{text: money(pr)}), h("span",{text:"or " + money(pr/months()) + "/mo"}))
+        : pr > 0 ? h("div",{class:"price"}, h("b",{text: money(pr)}))
         : h("div",{class:"price"}, h("b",{text:"Any amount"}));
       sec.append(h("div",{class:"opp"},
         h("div",{class:"nm"},
           h("b",{text: o.name}),
-          whereLine(o) ? h("span",{class:"where", text: " · " + whereLine(o)}) : null,
+          whereLine(o),
           h("div",{class:"rec", text:"Recognition: " + o.rec})),
         priceEl,
         h("div",{class:"avail" + (av.full ? " full" : ""), text: av.t}),
