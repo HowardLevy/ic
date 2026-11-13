@@ -115,22 +115,23 @@ input.num.short{width:5.5rem}
 .status p{font-weight:500;color:var(--ink-2)}
 .status p.ok{color:var(--ok);font-weight:700}
 .status p.warn{color:var(--warn);font-weight:700}
-.prow .sum .offer{display:block;color:var(--muted)}
+.prow .sum .offer{color:var(--muted)}
 .prow .sum .offer.short,td.short{color:var(--warn);font-weight:700}
 
-.pyramid{display:grid;gap:10px;margin:8px 0 34px;padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
-.prow{display:grid;grid-template-columns:10.5rem 1fr 10rem;gap:16px;align-items:center;padding:4px 0}
-.prow .lv b{display:block;font-family:"Alegreya",Georgia,serif;font-size:1.12rem;line-height:1.15}
+.pyramid{display:grid;gap:2px;margin:8px 0 28px;padding:14px 20px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.prow{display:grid;grid-template-columns:7.5rem 1fr 13rem;gap:14px;align-items:center;padding:3px 0;border-bottom:1px solid var(--line)}
+.prow:last-of-type{border-bottom:0}
+.prow .lv b{display:block;font-family:"Alegreya",Georgia,serif;font-size:1.05rem;line-height:1.1}
 .prow .lv span{color:var(--muted);font-size:.93rem}
-.tiles{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:41rem;margin:0 auto;width:100%}
-.tile{width:19px;height:19px;border-radius:3px;border:1.5px solid var(--sage);background:var(--tile-empty)}
+.tiles{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:41rem;margin:0 auto;width:100%}
+.tile{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--sage);background:var(--tile-empty)}
 .tile.on{background:var(--green);border-color:var(--green)}
-.tiles .more{font-size:.9rem;color:var(--ok);font-weight:700;margin-left:4px;line-height:19px}
-.prow .sum{text-align:right;font-size:.95rem;color:var(--ink-2)}
-.prow .sum b{display:block;color:var(--ink);font-size:1rem}
-.bar{max-width:41rem;margin:0 auto;width:100%;height:19px;border-radius:3px;border:1.5px solid var(--sage);background:var(--tile-empty);overflow:hidden}
+.tiles .more{font-size:.9rem;color:var(--ok);font-weight:700;margin-left:4px;line-height:16px}
+.prow .sum{text-align:right;font-size:.88rem;line-height:1.25;color:var(--ink-2)}
+.prow .sum b{display:block;color:var(--ink);font-size:.95rem}
+.bar{max-width:41rem;margin:0 auto;width:100%;height:16px;border-radius:3px;border:1.5px solid var(--sage);background:var(--tile-empty);overflow:hidden}
 .bar i{display:block;height:100%;background:var(--green);width:0}
-.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.92rem;margin-top:4px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.88rem;margin-top:8px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend .tile{display:inline-block}
 
@@ -216,8 +217,10 @@ footer img{width:52px}
 @media (max-width:900px){
   .hero .wrap{grid-template-columns:1fr}
   .join-grid{grid-template-columns:1fr}
-  .prow{grid-template-columns:1fr;gap:6px}
-  .prow .sum{text-align:left}
+  .prow{grid-template-columns:auto 1fr;gap:4px 12px;padding:6px 0}
+  .prow .lv{grid-column:1;grid-row:1}
+  .prow .sum{grid-column:2;grid-row:1}
+  .prow .tiles,.prow .bar{grid-column:1 / -1;grid-row:2;justify-content:flex-start;margin:0}
   .opp{grid-template-columns:1fr auto;gap:6px 16px}
   .opp .nm{grid-column:1 / -1}
   .opp .go{grid-column:2;grid-row:2 / span 2;align-self:center}
@@ -225,8 +228,8 @@ footer img{width:52px}
 @media (max-width:560px){
   .two{grid-template-columns:1fr}
   .top nav{display:none}
-  .pyramid{padding:16px}
-  .tile{width:15px;height:15px}
+  .pyramid{padding:10px 14px}
+  .tile{width:14px;height:14px}
 }
 </style>
 <script>
@@ -580,8 +583,8 @@ function levelOffer(l){
   return {listed:listed, open:open, value:value};
 }
 function offerText(off){
-  if (off.open) return off.listed ? off.listed + " spaces plus open-ended gifts" : "Open-ended gifts";
-  return off.listed + (off.listed === 1 ? " space listed" : " spaces listed");
+  if (off.open) return off.listed ? off.listed + "+ spaces" : "open-ended";
+  return off.listed + (off.listed === 1 ? " space" : " spaces");
 }
 function claimedCount(id){ var n=0; claims.forEach(function(c){ if (c.opp === id) n++; }); return n; }
 function oppLeft(o){ return o.count == null ? null : Math.max(0, o.count - claimedCount(o.id)); }
@@ -621,12 +624,12 @@ function renderPyramid(){
     var st = levelStats(l), need = Math.max(0, Math.round(l.gifts||0));
     var off = levelOffer(l), short = !off.open && off.listed < need;
     var offEl = h("span",{class:"offer" + (short ? " short" : ""), text: offerText(off)});
-    var right = h("div",{class:"sum"}, h("b",{text: money(subtotal(draft,l))}), st.n + " of " + need + " pledged", offEl);
+    var right = h("div",{class:"sum"}, h("b",{text: money(subtotal(draft,l))}), st.n + " of " + need + " pledged · ", offEl);
     var mid;
     if (isUnder(draft,l)){
       var sub = subtotal(draft,l) || 1;
       mid = h("div",{class:"bar", role:"img", "aria-label": money(st.sum) + " of " + money(sub) + " pledged"}, h("i",{style:"width:" + Math.min(100, st.sum/sub*100) + "%"}));
-      right = h("div",{class:"sum"}, h("b",{text: money(subtotal(draft,l))}), money(st.sum) + " pledged", h("span",{class:"offer", text: offerText(off)}));
+      right = h("div",{class:"sum"}, h("b",{text: money(subtotal(draft,l))}), money(st.sum) + " pledged · ", h("span",{class:"offer", text: offerText(off)}));
     } else {
       mid = h("div",{class:"tiles", role:"img", "aria-label": st.n + " of " + need + " gifts pledged"});
       var shown = Math.min(need, 120);
