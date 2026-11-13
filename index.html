@@ -294,9 +294,9 @@ window.IC_CONFIG = {
     <div class="table-wrap">
       <table>
         <caption class="sr">Gift range chart</caption>
-        <thead><tr><th>Gift level</th><th class="l">Society</th><th>Gifts needed</th><th>Spaces listed</th><th>Pledged</th><th>Subtotal</th><th>Cumulative</th><th>Per month</th></tr></thead>
+        <thead><tr><th>Gift level</th><th>Gifts needed</th><th>Spaces listed</th><th>Pledged</th><th>Subtotal</th><th>Cumulative</th><th>Per month</th></tr></thead>
         <tbody id="planBody"></tbody>
-        <tfoot><tr><td>Total</td><td></td><td id="totGifts"></td><td id="totOffer"></td><td id="totPledged"></td><td id="totSub"></td><td id="totCum"></td><td></td></tr></tfoot>
+        <tfoot><tr><td>Total</td><td id="totGifts"></td><td id="totOffer"></td><td id="totPledged"></td><td id="totSub"></td><td id="totCum"></td><td></td></tr></tfoot>
       </table>
     </div>
   </div>
@@ -554,7 +554,7 @@ function levelFor(p, amt){
 function isUnder(p, l){ var ls = levelsSorted(p); return l === ls[ls.length-1] && l.amount === 0; }
 function levelLabel(p, l){
   var ls = levelsSorted(p);
-  if (!isUnder(p,l)) return money(l.amount) + (ls[0] === l ? "+" : "");
+  if (!isUnder(p,l)) return money(l.amount);
   var above = ls[ls.length-2];
   return "Under " + money(above ? above.amount : 0);
 }
@@ -634,7 +634,7 @@ function renderPyramid(){
       if (need > shown) mid.append(h("span",{class:"more", text:"+" + (need-shown) + " more"}));
       if (st.n > need) mid.append(h("span",{class:"more", text:"+" + (st.n-need) + " beyond plan"}));
     }
-    box.append(h("div",{class:"prow"}, h("div",{class:"lv"}, h("b",{text: levelLabel(draft,l)}), h("span",{text: socName(l)})), mid, right));
+    box.append(h("div",{class:"prow"}, h("div",{class:"lv"}, h("b",{text: levelLabel(draft,l)})), mid, right));
   });
   box.append(h("div",{class:"legend"},
     h("span",null,h("i",{class:"tile"})," Gift needed"),
@@ -660,14 +660,11 @@ function renderPlanTable(){
     var lvCell = under
       ? h("td",{class:"l"}, h("span",{class:"under-label","data-k":"label"}, levelLabel(draft,l)),
           h("label",{class:"avg"}, "Average gift", numInput(l.avg||0, function(v){ l.avg=v; planChanged(); }, {class:"num short","aria-label":"Average gift below the lowest level"})))
-      : h("td",{class:"l"}, numInput(l.amount, function(v){ l.amount=v; planChanged(); }, {"aria-label": l.society + " gift level"},
+      : h("td",{class:"l"}, numInput(l.amount, function(v){ l.amount=v; planChanged(); }, {"aria-label": "Gift level amount"},
           function(){ if (orderKey() !== before) renderAll(); }));
-    var soc = h("input",{type:"text", class:"text", "aria-label":"Society name"}); soc.value = l.society;
-    soc.addEventListener("input", function(){ l.society = soc.value; planChanged(true); });
     tb.append(h("tr",{"data-lid":l.id},
       lvCell,
-      h("td",{class:"l"}, soc),
-      h("td",null, numInput(l.gifts, function(v){ l.gifts=Math.round(v); planChanged(); }, {class:"num short", step:"1", "aria-label":"Gifts needed at " + l.society})),
+      h("td",null, numInput(l.gifts, function(v){ l.gifts=Math.round(v); planChanged(); }, {class:"num short", step:"1", "aria-label":"Gifts needed at " + levelLabel(draft,l)})),
       h("td",{"data-k":"offer"}), h("td",{"data-k":"pledged"}), h("td",{"data-k":"sub"}), h("td",{"data-k":"cum"}), h("td",{"data-k":"pm"})));
   });
   updatePlanComputed();
@@ -702,7 +699,7 @@ function updatePlanComputed(){
   else lines.push(["warn","The plan falls " + money(-diff) + " short of the goal. Add gifts or raise a level’s amount."]);
   shorts.forEach(function(x){
     var gap = (x.l.gifts||0) - x.off.listed;
-    lines.push(["warn", levelLabel(draft,x.l) + " " + socName(x.l) + ": " + (x.l.gifts||0) + " gifts needed but " + x.off.listed + (x.off.listed === 1 ? " space" : " spaces") + " listed. List " + gap + " more " + (gap === 1 ? "space" : "spaces") + " at this level or plan fewer gifts."]);
+    lines.push(["warn", levelLabel(draft,x.l) + " level: " + (x.l.gifts||0) + " gifts needed but " + x.off.listed + (x.off.listed === 1 ? " space" : " spaces") + " listed. List " + gap + " more " + (gap === 1 ? "space" : "spaces") + " at this level or plan fewer gifts."]);
   });
   if (!shorts.length) lines.push(["ok","Every level has at least as many spaces listed as gifts needed."]);
   lines.push(["", "Listed spaces are worth " + money(offVal) + (goal ? ", " + (offVal/goal).toFixed(1) + " times the goal" : "") + (offOpen ? ", plus open-ended gifts" : "") + ". Hidden spaces don’t count until they’re shown to donors."]);
@@ -747,7 +744,7 @@ function renderNaming(){
     g.items.push(o);
   });
   groups.forEach(function(g){
-    var sec = h("div",{class:"group"}, h("div",{class:"group-head"}, h("h3",{text: levelLabel(draft, g.l)}), h("span",{text: socName(g.l)})));
+    var sec = h("div",{class:"group"}, h("div",{class:"group-head"}, h("h3",{text: levelLabel(draft, g.l)})));
     g.items.forEach(function(o){
       var av = availText(o);
       var pr = price(o);
@@ -773,7 +770,7 @@ function renderNamingEdit(box){
   var tb = h("tbody");
   draft.opps.slice().sort(function(a,b){ return (BLDG_ORDER.indexOf(a.bldg) - BLDG_ORDER.indexOf(b.bldg)) || (price(b) - price(a)); }).forEach(function(o){
     var lvSel = h("select",{"aria-label":"Gift level"}), curL = levelOf(o);
-    levelsSorted(draft).forEach(function(l){ var op = h("option",{value:l.id, text: levelLabel(draft,l) + " " + socName(l)}); if (l.id === curL.id) op.selected = true; lvSel.append(op); });
+    levelsSorted(draft).forEach(function(l){ var op = h("option",{value:l.id, text: levelLabel(draft,l)}); if (l.id === curL.id) op.selected = true; lvSel.append(op); });
     lvSel.addEventListener("change", function(){
       var l = draft.levels.filter(function(x){ return x.id === lvSel.value; })[0]; if (!l) return;
       o.level = l.id;
@@ -841,7 +838,6 @@ function updateOppHint(){
   if (o.desc) parts.push(o.desc + ".");
   parts.push("Recognition: " + o.rec + ".");
   if (price(o) > 0) parts.push("Minimum " + money(price(o)) + ".");
-  parts.push(socName(l) + ".");
   $("#oppHint").textContent = parts.join(" ");
 }
 function chooseOpp(id){
