@@ -147,21 +147,23 @@ td input.text{width:8.5rem}
 .avg{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.92rem;margin-top:4px}
 
 /* Naming */
-.naming-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-bottom:24px}
+.naming-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-bottom:16px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font:inherit;font-weight:500;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink-2);border-color:var(--ink-2);color:var(--paper)}
-.group{margin-top:30px}
+.group{margin-top:20px}
 .group:first-child{margin-top:0}
-.group-head{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--ink-2)}
+.group-head{display:flex;align-items:baseline;gap:12px;padding-bottom:4px;border-bottom:2px solid var(--ink-2)}
+.group-head h3{font-size:1.15rem}
 .group-head span{color:var(--muted)}
-.opp{display:grid;grid-template-columns:1fr 15.5rem 8rem 6.5rem;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
-.opp .nm b{font-size:1.08rem}
-.opp .nm .where{color:var(--muted);font-size:.95rem}
-.opp .nm .rec{color:var(--ink-2);font-size:.95rem;margin-top:2px}
-.opp .price b{display:block;font-size:1.08rem}
-.opp .price span{color:var(--muted);font-size:.93rem}
-.opp .avail{font-size:.95rem;color:var(--ink-2)}
+.opp{display:grid;grid-template-columns:1fr 12.5rem 7rem 5.5rem;gap:4px 14px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);line-height:1.3}
+.opp .nm b{font-size:1rem}
+.opp .nm .where{color:var(--muted);font-size:.92rem}
+.opp .nm .rec{color:var(--muted);font-size:.88rem}
+.opp .price b{font-size:1rem}
+.opp .price span{color:var(--muted);font-size:.88rem;margin-left:6px}
+.opp .go .btn.small{padding:4px 12px;font-size:.92rem}
+.opp .avail{font-size:.9rem;color:var(--ink-2)}
 .opp .avail.full{color:var(--muted);font-style:italic}
 .opp .go{text-align:right}
 .empty{color:var(--muted);padding:20px 0}
@@ -221,7 +223,7 @@ footer img{width:52px}
   .prow .lv{grid-column:1;grid-row:1}
   .prow .sum{grid-column:2;grid-row:1}
   .prow .tiles,.prow .bar{grid-column:1 / -1;grid-row:2;justify-content:flex-start;margin:0}
-  .opp{grid-template-columns:1fr auto;gap:6px 16px}
+  .opp{grid-template-columns:1fr auto;gap:2px 12px}
   .opp .nm{grid-column:1 / -1}
   .opp .go{grid-column:2;grid-row:2 / span 2;align-self:center}
 }
@@ -309,7 +311,7 @@ window.IC_CONFIG = {
   <div class="wrap">
     <div class="sec-head">
       <h2>Name a space</h2>
-      <p>Every gift can be made in honor or in memory of someone. Gifts of $1,000 or more are listed on the permanent campaign donor wall.</p>
+      <p>Monthly amounts are for a <span data-months>36</span>-month pledge. Every gift can be made in honor or in memory of someone, and gifts of $1,000 or more are listed on the permanent campaign donor wall.</p>
     </div>
     <div class="naming-tools">
       <div class="chips" role="group" aria-label="Filter by building" id="chips"></div>
@@ -752,12 +754,12 @@ function renderNaming(){
       var av = availText(o);
       var pr = price(o);
       var priceEl = pr > 0
-        ? h("div",{class:"price"}, h("b",{text: money(pr)}), h("span",{text:"or " + money(pr/months()) + " a month for " + months() + " months"}))
-        : h("div",{class:"price"}, h("b",{text:"Any amount"}), h("span",{text:"once or monthly"}));
+        ? h("div",{class:"price", title: money(pr/months()) + " a month for " + months() + " months"}, h("b",{text: money(pr)}), h("span",{text:"or " + money(pr/months()) + "/mo"}))
+        : h("div",{class:"price"}, h("b",{text:"Any amount"}));
       sec.append(h("div",{class:"opp"},
         h("div",{class:"nm"},
           h("b",{text: o.name}),
-          whereLine(o) ? h("div",{class:"where", text: whereLine(o)}) : null,
+          whereLine(o) ? h("span",{class:"where", text: " · " + whereLine(o)}) : null,
           h("div",{class:"rec", text:"Recognition: " + o.rec})),
         priceEl,
         h("div",{class:"avail" + (av.full ? " full" : ""), text: av.t}),
